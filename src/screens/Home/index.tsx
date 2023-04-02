@@ -1,11 +1,49 @@
-import { Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { FlatList, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { Participant } from '../../components/Participant';
 import { styles } from './styles';
 
 export function Home() {
+    const participants = [
+        {
+            name: 'Mateus',
+            id: 1
+        },
+        {
+            name: 'João',
+            id: 2
+        },
+        {
+            name: 'Pedro',
+            id: 3
+        },
+        {
+            name: 'Maria',
+            id: 4
+        },
+        {
+            name: 'José',
+            id: 5
+        },
+        {
+            name: 'Ana',
+            id: 6
+        },
+        {
+            name: 'Paulo',
+            id: 7
+        },
+        {
+            name: 'Marcos',
+            id: 8
+        }
+    ];
 
     function handleParticipantAdd() {
         console.log('Adicionar participante')
+    }
+
+    function handleParticipantRemove(name: string) {
+        console.log('Remover participante:', name)
     }
 
     return (
@@ -28,8 +66,40 @@ export function Home() {
                 </TouchableOpacity>
             </View>
 
-            <Participant name="Mateus" />
-            <Participant name="Pedro" />
+
+
+            <FlatList
+                data={participants}
+                ListEmptyComponent={() => (
+                    <Text style={styles.emptyListText}>Nenhum participante! :(</Text>
+                )}
+                keyExtractor={item => String(item.id)}
+                renderItem={({ item: {
+                    id,
+                    name
+                } }) => (
+                    <Participant
+                        key={id}
+                        name={name}
+                        onRemove={handleParticipantRemove}
+                    />
+                )}
+            />
+
+
+            {/* 
+Main difference between FlatList and ScrollView is that FlatList is more performatic
+ScrollList loads all the data at once, while FlatList loads only the data that is visible on the screen.
+            */}
+            <ScrollView>
+                {participants.map(participant => (
+                    <Participant
+                        key={participant.id}
+                        name={participant.name}
+                        onRemove={handleParticipantRemove}
+                    />
+                ))}
+            </ScrollView>
         </View>
     );
 }
