@@ -1,9 +1,10 @@
-import { FlatList, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { useState } from 'react';
+import { Alert, FlatList, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { Participant } from '../../components/Participant';
 import { styles } from './styles';
 
 export function Home() {
-    const participants = [
+    const [participants, setParticipants] = useState([
         {
             name: 'Mateus',
             id: 1
@@ -21,29 +22,49 @@ export function Home() {
             id: 4
         },
         {
-            name: 'José',
+            name: 'Ana',
             id: 5
         },
         {
-            name: 'Ana',
-            id: 6
-        },
-        {
             name: 'Paulo',
-            id: 7
-        },
-        {
-            name: 'Marcos',
-            id: 8
+            id: 6
         }
-    ];
+    ])
+
+    const [newParticipant, setNewParticipant] = useState('');
 
     function handleParticipantAdd() {
-        console.log('Adicionar participante')
+        const lastId = participants[participants.length - 1].id;
+        const newParticipants = [...participants, {
+            name: newParticipant,
+            id: lastId + 1
+        }]
+        setParticipants(newParticipants);
+        Alert.alert('Participante adicionado!', undefined, undefined, {
+            cancelable: true
+        });
     }
 
     function handleParticipantRemove(name: string) {
-        console.log('Remover participante:', name)
+        Alert.alert("Remover", `Deseja remover ${name}?`, [
+            {
+                text: 'Não',
+                style: 'cancel'
+            },
+            {
+                text: 'Sim',
+                onPress: () => {
+                    const newParticipants = participants.filter(participant => participant.name !== name);
+                    setParticipants(newParticipants);
+                    Alert.alert('Participante removido!', undefined, undefined, {
+                        cancelable: true
+                    });
+                }
+            }
+        ],
+            {
+                cancelable: true,
+            })
     }
 
     return (
@@ -58,6 +79,8 @@ export function Home() {
                     placeholderTextColor="#6b6b6b"
                     // Some keyboard types will only work on Android or iOS
                     keyboardType='default'
+                    value={newParticipant}
+                    onChangeText={setNewParticipant}
                 />
 
                 {/* Clickeable region  */}
