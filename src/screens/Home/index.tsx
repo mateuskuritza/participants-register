@@ -34,7 +34,13 @@ export function Home() {
     const [newParticipant, setNewParticipant] = useState('');
 
     function handleParticipantAdd() {
-        const lastId = participants[participants.length - 1].id;
+        if (participants.map(p => p.name).includes(newParticipant)) {
+            Alert.alert('Participante já adicionado!', undefined, undefined, {
+                cancelable: true
+            });
+            return;
+        }
+        const lastId = participants[participants.length - 1]?.id || 0;
         const newParticipants = [...participants, {
             name: newParticipant,
             id: lastId + 1
