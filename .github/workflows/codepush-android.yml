@@ -2,10 +2,11 @@ name: Codepush-Android-TEST
 
 on:
   push:
-    # branches:
-    #   - codepush-android
     tags:
       - 'CP-Android/v[0-9]+.[0-9]+.[0-9]+'
+    # branches:
+    #   - codepush-android
+
 
 jobs:
 # env:
@@ -18,8 +19,8 @@ jobs:
     name: Get Version
     runs-on: ubuntu-latest
     outputs:
-    # 'prepare'  to get output variable from future step
       target_version: ${{ steps.setoutput.outputs.target_version }}
+    # 'prepare'  to get output variable from future step
 
     steps:
 
