@@ -2,17 +2,15 @@ name: Codepush-Android-TEST
 
 on:
   push:
-    # branches:
-    #   - codepush-android
     tags:
-      - 'CP-Android/v[0-9]+.[0-9]+.[0-9]+'
+      - 'Codepush-Android-[0-9]+/v[0-9]+.[0-9]+.[0-9]+'
+
 
 jobs:
   getversion:
     name: Get Version
     runs-on: ubuntu-latest
     outputs:
-    # 'prepare'  to get output variable from future step
       target_version: ${{ steps.setoutput.outputs.target_version }}
 
     steps:
@@ -54,3 +52,9 @@ jobs:
 
       - name: Show branch name
         run: cat test.txt
+      # - name: Codepush Update
+      #   uses: NishanthShankar/codepush-action@master
+      #   with:
+      #     args: release-react -a ${{ env.APP_NAME_ANDROID }}  -d Production -t ${{needs.getversion.outputs.target_version}}
+      #   env:
+      #     APPCENTER_ACCESS_TOKEN: ${{ env.APP_CENTER_TOKEN_ANDROID }}
