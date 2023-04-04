@@ -18,7 +18,7 @@ jobs:
     name: Get Version
     runs-on: ubuntu-latest
     outputs:
-    # 'prepare' to get output variable from future step
+    # 'prepare'  to get output variable from future step
       target_version: ${{ steps.setoutput.outputs.target_version }}
 
     steps:
