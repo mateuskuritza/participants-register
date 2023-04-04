@@ -62,6 +62,9 @@ jobs:
 
       - name: Show target_version
         run: echo ${{needs.getversion.outputs.target_version}} 
+
+      - name: Show branch name
+        run: cat test.txt
       # - name: Codepush Update
       #   uses: NishanthShankar/codepush-action@master
       #   with:
