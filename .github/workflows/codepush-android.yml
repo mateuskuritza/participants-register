@@ -30,7 +30,7 @@ jobs:
       - name: Set Output 
         id: setoutput
         env:
-          TAG_VER: ${{steps.splittag.outputs._1}}
+          TAG_VER: ${{steps.stag.outputs._1}}
         run: |
           echo ${{steps.splittag.outputs}}
           echo "target_version=$TAG_VER" >> $GITHUB_OUTPUT
