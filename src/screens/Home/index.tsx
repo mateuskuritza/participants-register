@@ -35,7 +35,7 @@ export function Home() {
 
     function handleParticipantAdd() {
         if (participants.map(p => p.name).includes(newParticipant)) {
-            Alert.alert('Participante já adicionado!', undefined, undefined, {
+            Alert.alert('Esse participante já foi adicionado antes!', undefined, undefined, {
                 cancelable: true
             });
             return;
