@@ -1,0 +1,80 @@
+name: Codepush-Android-TEST
+
+on:
+  push:
+    branches:
+      - codepush-android
+    tags:
+      - 'CP-Android/v[0-9]+.[0-9]+.[0-9]+/v[0-9]+'
+    
+env:
+  # APP_CENTER_TOKEN: ${{ secrets.APP_CENTER_TOKEN_MYAPP_ANDROID_TEST }}
+  # APP_NAME: ${{ 'MyApp-Android/ENV_TEST' }}
+  # APP_CENTER_TOKEN: ${{ secrets.APP_CENTER_TOKEN_MYAPP_IOS_TEST }}
+  # APP_NAME: ${{ 'MyApp-iOS/ENV_TEST' }}
+
+  getversion:
+    name: Get Version
+    runs-on: ubuntu-latest
+    outputs:
+    # 'prepare' to get output variable from future step
+      target_version: ${{ steps.setoutput.outputs.target_version }}
+
+    steps:
+
+      - name: Get current tag
+        id: ctag
+        # The output of this step is the "tag" below inside tag "id" => steps.ctag.outputs.tag
+        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+
+      - uses: jungwinter/split@v2
+        id: stag
+        with:
+          msg: ${{ steps.ctag.outputs.tag }}
+          separator: "/v"
+
+      - name: Set Output 
+        id: setoutput
+        env:
+          TAG_VER: ${{steps.splittag.outputs._1}}
+        run: |
+          echo "::set-output name=target_version::$TAG_VER"
+
+
+  update-android:
+    name: Update Android
+    needs: getversion
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Show target_version
+        run: echo ${{needs.getversion.outputs.target_version}}
+      # - name: Codepush Update
+      #   uses: NishanthShankar/codepush-action@master
+      #   with:
+      #     args: release-react -a ${{ env.APP_NAME_ANDROID }}  -d Production -t ${{needs.getversion.outputs.target_version}}
+      #   env:
+      #     APPCENTER_ACCESS_TOKEN: ${{ env.APP_CENTER_TOKEN_ANDROID }}
+  
+  # update-ios:
+  #   name: Update iOS
+  #   needs: getversion
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
+
+  #     - name: Install Dependencies
+  #       run: npm install
+
+  #     - name: Deploy to Codepush
+  #       uses: NishanthShankar/codepush-action@master
+  #       with:
+  #         args: release-react -a ${{ env.APP_NAME_IOS }}  -d Production -t ${{needs.getversion.outputs.target_version}}
+  #       env:
+  #         APPCENTER_ACCESS_TOKEN: ${{ env.APP_CENTER_TOKEN_IOS }}
