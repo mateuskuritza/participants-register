@@ -28,6 +28,10 @@ export function Home() {
         {
             name: 'Paulo',
             id: 6
+        },
+        {
+            name: 'Alfredo',
+            id: 7
         }
     ])
 
