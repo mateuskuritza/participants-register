@@ -17,7 +17,7 @@ jobs:
 
       - name: Get current tag
         id: ctag
-        run: echo "tag=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
+        run: echo "tag=${{GITHUB_REF#refs/*/}}" >> $GITHUB_OUTPUT
 
       - uses: jungwinter/split@v2
         id: stag
@@ -30,6 +30,7 @@ jobs:
         env:
           TAG_VER: ${{steps.splittag.outputs._1}}
         run: |
+          echo ${{steps.splittag.outputs}}
           echo "target_version=$TAG_VER" >> $GITHUB_OUTPUT
 
 
