@@ -15,9 +15,11 @@ jobs:
   # APP_NAME: ${{ 'MyApp-iOS/ENV_TEST' }}
 
   checkIfIsRelease:
+    name: Check if is a valid release name
     runs-on: ubuntu-latest
-    if: "!startsWith(github.ref, 'refs/tags/CP-Android/v')"
-    continue-on-error: true
+    steps:
+      if: "!startsWith(github.ref, 'refs/tags/CP-Android/v')"
+      continue-on-error: true
 
   getversion:
     name: Get Version
