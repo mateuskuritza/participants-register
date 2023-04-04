@@ -27,7 +27,7 @@ jobs:
         if: "!startsWith(github.ref, 'refs/tags/CP-Android/v')"
         run: |
           echo "This is not a valid release name tag."
-          echo github.ref
+          echo ${{github.ref}}
           exit 1
 
       - name: Get current tag
