@@ -17,7 +17,9 @@ jobs:
 
       - name: Get current tag
         id: ctag
-        run: echo "tag=${{GITHUB_REF#refs/*/}}" >> $GITHUB_OUTPUT
+        run: |
+          echo "${GITHUB_REF#refs/*/}"
+          echo "tag=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
 
       - uses: jungwinter/split@v2
         id: stag
