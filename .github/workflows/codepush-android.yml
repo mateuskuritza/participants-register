@@ -2,12 +2,13 @@ name: Codepush-Android-TEST
 
 on:
   push:
-    branches:
-      - codepush-android
+    # branches:
+    #   - codepush-android
     tags:
-      - 'CP-Android/v[0-9]+.[0-9]+.[0-9]+/v[0-9]+'
-    
-env:
+      - 'CP-Android/v[0-9]+.[0-9]+.[0-9]+'
+
+jobs:
+# env:
   # APP_CENTER_TOKEN: ${{ secrets.APP_CENTER_TOKEN_MYAPP_ANDROID_TEST }}
   # APP_NAME: ${{ 'MyApp-Android/ENV_TEST' }}
   # APP_CENTER_TOKEN: ${{ secrets.APP_CENTER_TOKEN_MYAPP_IOS_TEST }}
@@ -17,15 +18,22 @@ env:
     name: Get Version
     runs-on: ubuntu-latest
     outputs:
-    # 'prepare' to get output variable from future step
+    # 'prepare'  to get output variable from future step
       target_version: ${{ steps.setoutput.outputs.target_version }}
 
     steps:
 
+      # - name: Check release name tag
+      #   if: "!startsWith(github.ref, 'refs/tags/CP-Android/v')"
+      #   run: |
+      #     echo "This is not a valid release name tag."
+      #     echo ${{github.ref}}
+      #     exit 1
+
       - name: Get current tag
         id: ctag
         # The output of this step is the "tag" below inside tag "id" => steps.ctag.outputs.tag
-        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+        run: echo "tag=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
 
       - uses: jungwinter/split@v2
         id: stag
@@ -38,7 +46,7 @@ env:
         env:
           TAG_VER: ${{steps.splittag.outputs._1}}
         run: |
-          echo "::set-output name=target_version::$TAG_VER"
+          echo "target_version=$TAG_VER" >> $GITHUB_OUTPUT
 
 
   update-android:
@@ -53,7 +61,10 @@ env:
         run: npm install
 
       - name: Show target_version
-        run: echo ${{needs.getversion.outputs.target_version}}
+        run: echo ${{needs.getversion.outputs.target_version}} 
+
+      - name: Show branch name
+        run: cat test.txt
       # - name: Codepush Update
       #   uses: NishanthShankar/codepush-action@master
       #   with:
