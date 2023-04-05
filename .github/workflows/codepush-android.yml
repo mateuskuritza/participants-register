@@ -10,18 +10,22 @@ jobs:
     outputs:
       target_version: ${{ steps.get_target_version.outputs.target_version }}
     steps:
+      - name: Get current tag
+        id: ctag
+        run: |
+          echo "${GITHUB_REF#refs/*/}"
+          echo "tag=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
       - uses: jungwinter/split@v2
         id: split_tag
-        env:
-          GIT_TAG: ${{GITHUB_REF#refs/*/}}
         with:
-          msg: $GIT_TAG
+          msg: ${{ steps.ctag.outputs.tag }}
           separator: /v
       - name: Get target_version
         id: get_target_version
         env:
           TAG_VER: ${{steps.split_tag.outputs._1}}
-        run: echo "target_version=$TAG_VER" >> $GITHUB_OUTPUT
+        run: |
+          echo "target_version=$TAG_VER" >> $GITHUB_OUTPUT
   update-android:
     name: Update Android
     needs: getversion
