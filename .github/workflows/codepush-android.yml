@@ -1,51 +1,29 @@
 name: Codepush-Android-TEST
-
 on:
   push:
     tags:
-      - 'Codepush-Android-[0-9]+/v[0-9]+.[0-9]+.[0-9]+'
-
-
+      - Codepush-Android-[0-9]+/v[0-9]+.[0-9]+.[0-9]+
 jobs:
   getversion:
     name: Get Version
     runs-on: ubuntu-latest
     outputs:
       target_version: ${{ steps.get_target_version.outputs.target_version }}
-
     steps:
       - uses: jungwinter/split@v2
         id: split_tag
         with:
           msg: ${{GITHUB_REF#refs/*/}}
-          separator: "/v"
-
+          separator: /v
       - name: Get target_version
         id: get_target_version
         env:
           TAG_VER: ${{steps.split_tag.outputs._1}}
         run: echo "target_version=$TAG_VER" >> $GITHUB_OUTPUT
-
-
   update-android:
     name: Update Android
     needs: getversion
     runs-on: ubuntu-latest
     steps:
       - name: Show target_version
-        run: echo ${{needs.getversion.outputs.target_version}} 
-      # - name: Checkout
-      #   uses: actions/checkout@v2
-
-      # - name: Install Dependencies
-      #   run: npm install
-
-
-      # - name: Show branch name
-      #   run: cat test.txt
-      # - name: Codepush Update
-      #   uses: NishanthShankar/codepush-action@master
-      #   with:
-      #     args: release-react -a ${{ env.APP_NAME_ANDROID }}  -d Production -t ${{needs.getversion.outputs.target_version}}
-      #   env:
-      #     APPCENTER_ACCESS_TOKEN: ${{ env.APP_CENTER_TOKEN_ANDROID }}
+        run: echo ${{needs.getversion.outputs.target_version}}
