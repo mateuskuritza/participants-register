@@ -11,28 +11,21 @@ jobs:
     name: Get Version
     runs-on: ubuntu-latest
     outputs:
-      target_version: ${{ steps.setoutput.outputs.target_version }}
+      target_version: ${{ steps.get_target_version.outputs.target_version }}
 
     steps:
-
-      - name: Get current tag
-        id: ctag
-        run: |
-          echo "${GITHUB_REF#refs/*/}"
-          echo "tag=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
-
+      - name: Split tag 
       - uses: jungwinter/split@v2
-        id: stag
+        id: split_tag
         with:
-          msg: ${{ steps.ctag.outputs.tag }}
+          msg: ${{GITHUB_REF#refs/*/}}
           separator: "/v"
 
-      - name: Set Output 
-        id: setoutput
+      - name: Get target_version
+        id: get_target_version
         env:
-          TAG_VER: ${{steps.stag.outputs._1}}
+          TAG_VER: ${{steps.split_tag.outputs._1}}
         run: |
-          echo ${{steps.splittag.outputs}}
           echo "target_version=$TAG_VER" >> $GITHUB_OUTPUT
 
 
@@ -41,17 +34,17 @@ jobs:
     needs: getversion
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+      # - name: Checkout
+      #   uses: actions/checkout@v2
 
-      - name: Install Dependencies
-        run: npm install
+      # - name: Install Dependencies
+      #   run: npm install
 
       - name: Show target_version
         run: echo ${{needs.getversion.outputs.target_version}} 
 
-      - name: Show branch name
-        run: cat test.txt
+      # - name: Show branch name
+      #   run: cat test.txt
       # - name: Codepush Update
       #   uses: NishanthShankar/codepush-action@master
       #   with:
