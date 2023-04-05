@@ -14,7 +14,6 @@ jobs:
       target_version: ${{ steps.get_target_version.outputs.target_version }}
 
     steps:
-      - name: Split tag 
       - uses: jungwinter/split@v2
         id: split_tag
         with:
