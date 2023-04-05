@@ -12,8 +12,10 @@ jobs:
     steps:
       - uses: jungwinter/split@v2
         id: split_tag
+        env:
+          GIT_TAG: ${{GITHUB_REF#refs/*/}}
         with:
-          msg: ${{GITHUB_REF#refs/*/}}
+          msg: $GIT_TAG
           separator: /v
       - name: Get target_version
         id: get_target_version
