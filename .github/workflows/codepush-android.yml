@@ -25,8 +25,7 @@ jobs:
         id: get_target_version
         env:
           TAG_VER: ${{steps.split_tag.outputs._1}}
-        run: |
-          echo "target_version=$TAG_VER" >> $GITHUB_OUTPUT
+        run: echo "target_version=$TAG_VER" >> $GITHUB_OUTPUT
 
 
   update-android:
@@ -34,14 +33,14 @@ jobs:
     needs: getversion
     runs-on: ubuntu-latest
     steps:
+      - name: Show target_version
+        run: echo ${{needs.getversion.outputs.target_version}} 
       # - name: Checkout
       #   uses: actions/checkout@v2
 
       # - name: Install Dependencies
       #   run: npm install
 
-      - name: Show target_version
-        run: echo ${{needs.getversion.outputs.target_version}} 
 
       # - name: Show branch name
       #   run: cat test.txt
